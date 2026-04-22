@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const submitButton = signupForm.querySelector('button[type="submit"]');
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -48,13 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("email").value;
     const activity = document.getElementById("activity").value;
 
+    if (!email.includes('@') || !activity) {
+      messageDiv.textContent = "Please enter a valid email and select an activity";
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Signing up...";
+
     try {
-      const response = await fetch(
-        `/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}`,
-        {
-          method: "POST",
-        }
-      );
+      debugger;
+      const response = await fetch(`/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
 
       const result = await response.json();
 
@@ -73,6 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         messageDiv.classList.add("hidden");
       }, 5000);
+
+      submitButton.disabled = false;
+      submitButton.textContent = "Sign Up";
     } catch (error) {
       messageDiv.textContent = "Failed to sign up. Please try again.";
       messageDiv.className = "error";
