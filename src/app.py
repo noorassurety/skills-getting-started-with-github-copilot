@@ -73,7 +73,7 @@ def signup_for_activity(activity_name: str, email: str):
         raise HTTPException(status_code=400, detail="Activity is full")
 
     # Validate email format
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+    if not re.match(r"[^ @]+@[^ @]+\.[^ @]+", email):
         raise HTTPException(status_code=400, detail="Invalid email format")
 
     # Add student
